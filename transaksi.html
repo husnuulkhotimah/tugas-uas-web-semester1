@@ -663,12 +663,10 @@
 
 </footer>
 
-  <script src="auth.js"></script> 
-  <script>
-    // Data harga minuman
-    const hargaMinuman = {
-    ...
+ <!-- Script Auth System -->
+  <script src="auth.js"></script>
 
+  <!-- Script Transaksi -->
   <script>
     // Data harga minuman
     const hargaMinuman = {
@@ -683,19 +681,32 @@
       "Lime Squash": 22000,
       "Lycee Syrup": 25000,
       "Korean Strawberry Milk": 45000,
-      "Lavender Lime Mojito": 30000
+      "Lavender Lime Mojito": 45000
     };
 
     // Array untuk menyimpan transaksi
     let daftarTransaksi = [];
 
-    // Cek status login
+    // CEK LOGIN SAAT HALAMAN DIMUAT
     window.addEventListener('DOMContentLoaded', function() {
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       
+      // Kalau belum login, redirect ke login
       if (isLoggedIn !== 'true') {
         alert('⚠️ Silakan login terlebih dahulu untuk melakukan transaksi!');
         window.location.href = 'login.html';
+        return; // PENTING: Stop eksekusi
+      }
+      
+      // Kalau sudah login, load data transaksi dari localStorage (kalau ada)
+      const savedTransaksi = localStorage.getItem('daftarTransaksi');
+      if (savedTransaksi) {
+        try {
+          daftarTransaksi = JSON.parse(savedTransaksi);
+          updateTabel();
+        } catch (e) {
+          console.error('Error loading transaksi:', e);
+        }
       }
     });
 
@@ -756,6 +767,15 @@
       btnCetak.style.display = 'block';
     }
 
+    // Fungsi save transaksi ke localStorage
+    function saveTransaksi() {
+      try {
+        localStorage.setItem('daftarTransaksi', JSON.stringify(daftarTransaksi));
+      } catch (e) {
+        console.error('Error saving transaksi:', e);
+      }
+    }
+
     // Event listener untuk form
     document.getElementById('formTransaksi').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -793,6 +813,7 @@
       };
       
       daftarTransaksi.push(transaksi);
+      saveTransaksi(); // SIMPAN KE LOCALSTORAGE
       updateTabel();
       document.getElementById('formTransaksi').reset();
       tampilkanAlert('✅ Pesanan berhasil ditambahkan!', 'success');
@@ -830,12 +851,10 @@
       const waktu = now.toLocaleTimeString('id-ID');
       const username = localStorage.getItem('username') || 'Admin';
 
-      // Set info struk
       document.getElementById('strukNo').textContent = generateNoStruk();
       document.getElementById('strukTanggal').textContent = `${tanggal} ${waktu}`;
       document.getElementById('strukKasir').textContent = username;
 
-      // Set items
       let itemsHTML = '';
       let subtotal = 0;
 
@@ -861,7 +880,6 @@
       document.getElementById('strukPajak').textContent = formatRupiah(pajak);
       document.getElementById('strukTotal').textContent = formatRupiah(total);
 
-      // Tampilkan struk
       document.getElementById('strukOverlay').classList.add('active');
     });
 
@@ -874,11 +892,8 @@
     function closeStruk() {
       document.getElementById('strukOverlay').classList.remove('active');
     }
-
-    function toggleMenu() {
-      const menu = document.getElementById('nav-menu');
-      menu.classList.toggle('hidden-nav');
-    }
   </script>
+</body>
+</html>
 </body>
 </html>
