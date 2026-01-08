@@ -1,65 +1,41 @@
 // ===== SISTEM LOGIN/LOGOUT UNIVERSAL =====
-// File: auth.js - Versi Debug
+// File: auth.js
 
 // Fungsi cek status login dan update navigasi
 function updateNavigation() {
-  console.log('=== UPDATE NAVIGATION CALLED ===');
-  
   const isLoggedIn = localStorage.getItem('isLoggedIn');
   const username = localStorage.getItem('username');
-  const userRole = localStorage.getItem('userRole');
-  
-  console.log('Is Logged In:', isLoggedIn);
-  console.log('Username:', username);
-  console.log('User Role:', userRole);
-  
   const navMenu = document.getElementById('nav-menu');
-  console.log('Nav Menu Found:', navMenu);
   
-  if (!navMenu) {
-    console.error('ERROR: nav-menu tidak ditemukan!');
-    return;
-  }
+  if (!navMenu) return;
   
   // Cari semua link di navigasi
   const links = navMenu.querySelectorAll('a');
-  console.log('Total Links:', links.length);
-  
   let loginLink = null;
   
   // Cari link login
   links.forEach(link => {
-    console.log('Link href:', link.getAttribute('href'));
     if (link.getAttribute('href') === 'login.html') {
       loginLink = link;
     }
   });
   
-  console.log('Login Link Found:', loginLink);
-  
-  if (!loginLink) {
-    console.error('ERROR: Link login tidak ditemukan!');
-    return;
-  }
+  if (!loginLink) return;
   
   if (isLoggedIn === 'true' && username) {
-    console.log('User sudah login - mengubah jadi logout button');
+    // User sudah login - ubah text jadi "Logout (username)" dengan warna beda tipis
+    loginLink.textContent = `Logout (${username})`;
+    loginLink.href = '#';
     
-    // User sudah login - ubah jadi tombol logout
-    const parentLi = loginLink.parentElement;
-    parentLi.innerHTML = `
-      <a href="#" onclick="logout(event)" style="background: linear-gradient(135deg, #cd6155, #e74c3c); color: white; padding: 8px 16px; border-radius: 25px; font-size: 14px;">
-        Logout (${username})
-      </a>
-    `;
-    
-    console.log('Logout button berhasil dibuat!');
+    loginLink.onclick = function(event) {
+      logout(event);
+    };
   } else {
-    console.log('User belum login');
-    // User belum login - tampilkan tombol login
+    // User belum login - tampilkan "Login" normal
     loginLink.textContent = 'Login';
     loginLink.href = 'login.html';
-    loginLink.style.background = '';
+    loginLink.style.backgroundColor = ''; // Reset background
+    loginLink.onclick = null;
   }
 }
 
@@ -79,7 +55,7 @@ function logout(event) {
     localStorage.removeItem('userRole');
     
     // Alert dan redirect ke halaman login
-    alert('Logout berhasil! Terima kasih telah menggunakan Coffee House.');
+    alert('Logout berhasil! Terima kasih telah menggunakan Golden Coffee House.');
     window.location.href = 'login.html';
   }
 }
@@ -94,7 +70,6 @@ function toggleMenu() {
 
 // Jalankan update navigasi saat halaman dimuat
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM Loaded - menjalankan updateNavigation()');
   updateNavigation();
   
   // Auto show menu di desktop
