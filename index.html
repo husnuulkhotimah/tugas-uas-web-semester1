@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda - Web Penjualan Minuman</title>
+  <style>
+    /* ===== RESET & VARIABLES ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #8b5a3c;
+      --secondary: #f4a460;
+      --accent: #d2691e;
+      --bg: #fff8f0;
+      --text-dark: #4a2511;
+      --white: #ffffff;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--white);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: rotate(360deg) scale(1.1);
+    }
+
+    header h1 {
+      color: var(--white);
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      display: block;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      padding: 60px 40px;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-content h2 {
+      color: var(--white);
+      font-size: 36px;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-content p {
+      color: var(--white);
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* INFO SECTION */
+    .info-section {
+      margin: 50px 0;
+      text-align: center;
+    }
+
+    .info-section h2 {
+      color: var(--primary);
+      font-size: 32px;
+      margin-bottom: 40px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .step {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .step-number {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--white);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .step h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .step p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* MENU SECTION */
+    .menu-section {
+      margin: 50px 0;
+    }
+
+    .menu-section h2 {
+      color: var(--primary);
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+	  .produk-container {
+	  display: grid;
+	  grid-template-columns: repeat(4, 1fr);
+	  gap: 25px;
+	}
+
+    .produk {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;              /* Bikin flexbox */
+	  flex-direction: column;     /* Susun vertikal */
+	  justify-content: space-between; /* Bagi ruang merata */
+	  min-height: 300px;          /* Tinggi minimal */
+	  max-height: 300px;          /* Tinggi maksimal (SAMA!) */
+    }
+
+    .produk:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    }
+
+	   .produk img {
+	  width: 100%;
+	  height: 160px;  /* ← Ganti jadi 160px */
+	  object-fit: cover;
+	  border-radius: 12px;
+	  margin-bottom: 10px;
+	}
+
+    .produk:hover img {
+      transform: scale(1.05);
+    }
+
+    .produk-name {
+      font-weight: bold;
+      color: var(--text-dark);
+      font-size: 16px;
+      margin: 10px 0 5px;
+    }
+
+    .produk-price {
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .best-seller {
+      border: 3px solid var(--accent);
+      background: linear-gradient(to bottom, rgba(244, 164, 96, 0.1), var(--white));
+    }
+
+    .badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: var(--white);
+      padding: 8px 15px;
+      font-size: 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    /* AUDIO SECTION */
+    .audio-box {
+      background: linear-gradient(135deg, #ffe4c4, #ffd8a8);
+      padding: 15px;
+      border-radius: 20px;
+      margin: 50px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .audio-box h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    audio {
+      width: 50%;
+      max-width: 500px;
+      border-radius: 50px;
+      outline: none;
+    }
+
+    /* VIDEO SECTION */
+    .video-section {
+      margin: 50px 0;
+      text-align: center;
+    }
+
+    .video-section h2 {
+      color: var(--primary);
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    .video-box {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--white);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    video {
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: linear-gradient(135deg, var(--text-dark), var(--primary));
+      color: var(--white);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .burger {
+      display: none;
+      font-size: 28px;
+      font-weight: bold;
+      background: transparent;
+      border: none;
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .burger {
+        display: block;
+      }
+
+      .header-container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .logo-title {
+        display: flex;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      nav ul li a {
+        display: block;
+      }
+
+      .hero-content h2 {
+        font-size: 28px;
+      }
+
+      .hero-content p {
+        font-size: 16px;
+      }
+
+      .produk-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      .hidden-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <div class="logo-title">
+        <img src="logo.png" alt="Logo Coffee House" class="logo">
+        <h1>Golden Coffee House</h1>
+        <div>
+          <button class="burger" onclick="toggleMenu()">
+              ☰
+          </button>
+        </div>
+      </div>
+
+      <nav>
+        <ul id="nav-menu" class="hidden-nav">
+          <li><a href="index.html" class="active">Beranda</a></li>
+          <li><a href="transaksi.html">Transaksi</a></li>
+          <li><a href="profil.html">Profil</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="hero-content">
+        <h2>Selamat Datang di Golden Coffee House</h2>
+        <p>Nikmati berbagai macam minuman berkualitas dengan harga terjangkau</p>
+      </div>
+    </section>
+
+    <!-- INFO SECTION -->
+    <section class="info-section">
+      <h2>Cara Menggunakan Aplikasi</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Lihat Menu</h3>
+          <p>Browse katalog minuman yang tersedia di halaman beranda</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Login</h3>
+          <p>Masuk ke akun Anda untuk melakukan pemesanan</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Pesan Minuman</h3>
+          <p>Pilih minuman favorit Anda dan lakukan transaksi</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUK -->
+  <section class="menu-section">
+  <h2>Menu Minuman</h2>
+  <div class="produk-container">
+    
+    <div class="produk">
+      <img src="foto_katalog1.jpg" alt="Matcha Latte Ice">
+      <p class="produk-name">Matcha Latte Ice</p>
+      <p class="produk-price">Rp 25.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="matcha.jpg" alt="Matcha Cold Brew with Black Sesame">
+      <p class="produk-name">Matcha Cold Brew with Black Sesame</p>
+      <p class="produk-price">Rp 35.000</p>
+    </div>
+
+    <div class="produk best-seller">
+      <span class="badge">Best Seller</span>
+      <img src="foto_katalog2.jpg" alt="Chocolate Coffee Latte">
+      <p class="produk-name">Chocolate Coffee Latte</p>
+      <p class="produk-price">Rp 28.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="brownsugar.jpg" alt="Brown Sugar Coffee">
+      <p class="produk-name">Brown Sugar Coffee</p>
+      <p class="produk-price">Rp 30.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="vannila.jpg" alt="Vanilla Cream Coffee">
+      <p class="produk-name">Vanilla Cream Coffee</p>
+      <p class="produk-price">Rp 27.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="foto_katalog9.jpg" alt="Cocoa Milk">
+      <p class="produk-name">Cocoa Milk</p>
+      <p class="produk-price">Rp 22.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="foto_katalog10.jpg" alt="Orange Tea">
+      <p class="produk-name">Orange Tea</p>
+      <p class="produk-price">Rp 20.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="lemonade.jpg" alt="Lemonade">
+      <p class="produk-name">Lemonade</p>
+      <p class="produk-price">Rp 20.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="lime.jpg" alt="Lime Squash">
+      <p class="produk-name">Lime Squash</p>
+      <p class="produk-price">Rp 22.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="lycee.jpg" alt="Lycee Syrup">
+      <p class="produk-name">Lycee Syrup</p>
+      <p class="produk-price">Rp 25.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="starberry.jpg" alt="Korean Strawberry Milk">
+      <p class="produk-name">Korean Strawberry Milk</p>
+      <p class="produk-price">Rp 45.000</p>
+    </div>
+
+    <div class="produk">
+      <img src="lavender.jpg" alt="Lavender Lime Mojito">
+      <p class="produk-name">Lavender Lime Mojito</p>
+      <p class="produk-price">Rp 45.000</p>
+    </div>
+    
+  </div>
+</section>
+
+    <!-- AUDIO -->
+    <section class="audio-box">
+      <h2>Musik santai untuk menemani minuman favorit Anda</h2>
+      <audio controls>
+        <source src="sound.mp3" type="audio/mpeg">
+      </audio>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="video-section">
+      <h2>Golden Coffee House Experience</h2>
+  <p style="text-align: center; color: #666; margin-bottom: 25px;">
+    Rasakan pengalaman menikmati kopi & minuman di Coffee House
+  </p>
+      <div class="video-box">
+        <video controls>
+          <source src="videopejualan.mp4" type="video/mp4">
+        </video>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 Web Penjualan Minuman</p>
+    <p>Dibuat oleh Husnul Khotimah | NIM: 251011701276</p>
+  </footer>
+
+</body>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById('nav-menu');
+  menu.classList.toggle('hidden-nav');
+}
+</script>
+</html>

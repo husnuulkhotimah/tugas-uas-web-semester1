@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaksi - Web Penjualan Minuman</title>
+  <style>
+    /* ===== RESET & VARIABLES ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #8b5a3c;
+      --secondary: #f4a460;
+      --accent: #d2691e;
+      --bg: #fff8f0;
+      --text-dark: #4a2511;
+      --white: #ffffff;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--white);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: rotate(360deg) scale(1.1);
+    }
+
+    header h1 {
+      color: var(--white);
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      display: block;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+
+    .page-title {
+      text-align: center;
+      color: var(--primary);
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    /* ===== FORM STYLES ===== */
+    .form-container {
+      background: var(--white);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      max-width: 600px;
+      margin: 0 auto 50px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: border 0.3s ease;
+      background: var(--bg);
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(244, 164, 96, 0.1);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--white);
+      padding: 14px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-cetak {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+      margin-top: 20px;
+    }
+
+    /* ALERT */
+    .alert {
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* ===== TABLE STYLES ===== */
+    .table-container {
+      overflow-x: auto;
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--white);
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(244, 164, 96, 0.05);
+    }
+
+    tbody tr td:last-child {
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #999;
+    }
+
+    /* TOTAL SECTION */
+    .total-section {
+      text-align: right;
+      margin-top: 20px;
+      padding: 20px;
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .total-section h3 {
+      color: var(--primary);
+      font-size: 24px;
+    }
+
+    .total-section span {
+      color: var(--accent);
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    /* ===== STRUK STYLES ===== */
+    .struk-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .struk-overlay.active {
+      display: flex;
+    }
+
+    .struk-container {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .struk-content {
+      padding: 30px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .struk-header {
+      text-align: center;
+      border-bottom: 2px dashed #333;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+
+    .struk-header h2 {
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .struk-header p {
+      font-size: 12px;
+      color: #666;
+      margin: 3px 0;
+    }
+
+    .struk-info {
+      margin-bottom: 15px;
+      font-size: 12px;
+    }
+
+    .struk-info p {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+    }
+
+    .struk-items {
+      border-top: 1px dashed #333;
+      border-bottom: 2px dashed #333;
+      padding: 15px 0;
+      margin: 15px 0;
+    }
+
+    .struk-item {
+      margin-bottom: 10px;
+    }
+
+    .struk-item-name {
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+
+    .struk-item-detail {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .struk-total {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px solid #333;
+    }
+
+    .struk-total p {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+
+    .struk-footer {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px dashed #333;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .struk-buttons {
+      display: flex;
+      gap: 10px;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .struk-buttons button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .struk-buttons button:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-print {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+      color: white;
+    }
+
+    .btn-close {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: linear-gradient(135deg, var(--text-dark), var(--primary));
+      color: var(--white);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .burger {
+      display: none;
+      font-size: 28px;
+      font-weight: bold;
+      background: transparent;
+      border: none;
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    /* ===== PRINT STYLES ===== */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .struk-container,
+      .struk-container * {
+        visibility: visible;
+      }
+      .struk-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+      }
+      .struk-buttons {
+        display: none;
+      }
+      .struk-overlay {
+        background: white;
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .burger {
+        display: block;
+      }
+
+      .header-container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .logo-title {
+        display: flex;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      .form-container {
+        padding: 25px;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      th, td {
+        padding: 10px;
+        font-size: 12px;
+      }
+
+      .total-section h3 {
+        font-size: 20px;
+      }
+
+      .total-section span {
+        font-size: 24px;
+      }
+
+      .hidden-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <div class="logo-title">
+        <img src="logo.png" alt="Logo Coffee House" class="logo">
+        <h1>Web Penjualan Minuman</h1>
+        <div>
+          <button class="burger" onclick="toggleMenu()">
+              ☰
+          </button>
+        </div>
+      </div>
+      <nav>
+        <ul id="nav-menu" class="hidden-nav">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="transaksi.html" class="active">Transaksi</a></li>
+          <li><a href="profil.html">Profil</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <h2 class="page-title">📝 Form Pemesanan Minuman</h2>
+
+    <!-- FORM TRANSAKSI -->
+    <div class="form-container">
+      <form id="formTransaksi">
+        <div class="form-group">
+          <label for="namaMinuman">Nama Minuman *</label>
+          <select id="namaMinuman" required>
+            <option value="">-- Pilih Minuman --</option>
+            <option value="Matcha Latte Ice">Matcha Latte Ice - Rp 25.000</option>
+            <option value="Matcha Cold Brew with Black Sesame">Matcha Cold Brew with Black Sesame - Rp 35.000</option>
+            <option value="Chocolate Coffee Latte">Chocolate Coffee Latte - Rp 28.000</option>
+            <option value="Brown Sugar Coffee">Brown Sugar Coffee - Rp 30.000</option>
+            <option value="Vanilla Cream Coffee">Vanilla Cream Coffee - Rp 27.000</option>
+            <option value="Cocoa Milk">Cocoa Milk - Rp 22.000</option>
+            <option value="Orange Tea">Orange Tea - Rp 20.000</option>
+            <option value="Lemonade">Lemonade - Rp 20.000</option>
+            <option value="Lime Squash">Lime Squash - Rp 22.000</option>
+            <option value="Lycee Syrup">Lycee Syrup - Rp 25.000</option>
+            <option value="Korean Strawberry Milk">Korean Strawberry Milk - Rp 45.000</option>
+            <option value="Lavender Lime Mojito">Lavender Lime Mojito - Rp 30.000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="jumlah">Jumlah (Cup) *</label>
+          <input type="number" id="jumlah" min="1" max="50" placeholder="Masukkan jumlah" required>
+        </div>
+
+        <div class="form-group">
+          <label for="kategori">Kategori *</label>
+          <select id="kategori" required>
+            <option value="">-- Pilih Kategori --</option>
+            <option value="Coffee">Coffee</option>
+            <option value="Non-Coffee">Non-Coffee</option>
+            <option value="Tea">Tea</option>
+            <option value="Fresh Drinks">Fresh Drinks</option>
+            <option value="Milk-Based">Milk-Based</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="namaPemesan">Nama Pemesan *</label>
+          <input type="text" id="namaPemesan" placeholder="Masukkan nama Anda" required>
+        </div>
+
+        <button type="submit" class="btn">🛒 Tambah Pesanan</button>
+      </form>
+
+      <div id="pesanAlert"></div>
+    </div>
+
+    <!-- TABEL DAFTAR TRANSAKSI -->
+    <section>
+      <h2 class="page-title">📋 Daftar Transaksi</h2>
+
+      <div class="table-container">
+        <table id="tabelTransaksi">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Minuman</th>
+              <th>Jumlah</th>
+              <th>Kategori</th>
+              <th>Pemesan</th>
+              <th>Harga Satuan</th>
+              <th>Total Harga</th>
+            </tr>
+          </thead>
+          <tbody id="bodyTransaksi">
+            <tr>
+              <td colspan="7" class="empty-state">
+                Belum ada transaksi. Silakan tambahkan pesanan!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="total-section">
+        <h3>Total Keseluruhan: <span id="totalKeseluruhan">Rp 0</span></h3>
+        <button id="btnCetakStruk" class="btn btn-cetak" style="display: none;">🧾 Cetak Struk</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- STRUK OVERLAY -->
+  <div class="struk-overlay" id="strukOverlay">
+    <div class="struk-container">
+      <div class="struk-content" id="strukContent">
+        <div class="struk-header">
+          <img src="logo.png" alt="Logo Coffee House" class="logo">
+          <h2>GOLDEN COFFEE HOUSE</h2>
+          <p>Jl. Kopi Nikmat No. 123</p>
+          <p>Telp: (021) 1234-5678</p>
+        </div>
+
+        <div class="struk-info">
+          <p><span>No. Struk:</span> <span id="strukNo"></span></p>
+          <p><span>Tanggal:</span> <span id="strukTanggal"></span></p>
+          <p><span>Kasir:</span> <span id="strukKasir"></span></p>
+        </div>
+
+        <div class="struk-items" id="strukItems"></div>
+
+        <div class="struk-total">
+          <p><span>Subtotal:</span> <span id="strukSubtotal"></span></p>
+          <p><span>Pajak (10%):</span> <span id="strukPajak"></span></p>
+          <p style="font-size: 18px; color: var(--accent);"><span>TOTAL:</span> <span id="strukTotal"></span></p>
+        </div>
+
+        <div class="struk-footer">
+          <p>Terima kasih atas kunjungan Anda!</p>
+          <p>Selamat menikmati minuman kami ☕</p>
+        </div>
+      </div>
+
+      <div class="struk-buttons">
+        <button class="btn-print" onclick="printStruk()">🖨️ Print</button>
+        <button class="btn-close" onclick="closeStruk()">✖️ Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 Web Penjualan Minuman</p>
+    <p>Dibuat oleh Husnul Khotimah | NIM: 251011701276</p>
+  </footer>
+
+  <script>
+    // Data harga minuman
+    const hargaMinuman = {
+      "Matcha Latte Ice": 25000,
+      "Matcha Cold Brew with Black Sesame": 35000,
+      "Chocolate Coffee Latte": 28000,
+      "Brown Sugar Coffee": 30000,
+      "Vanilla Cream Coffee": 27000,
+      "Cocoa Milk": 22000,
+      "Orange Tea": 20000,
+      "Lemonade": 20000,
+      "Lime Squash": 22000,
+      "Lycee Syrup": 25000,
+      "Korean Strawberry Milk": 45000,
+      "Lavender Lime Mojito": 30000
+    };
+
+    // Array untuk menyimpan transaksi
+    let daftarTransaksi = [];
+
+    // Cek status login
+    window.addEventListener('DOMContentLoaded', function() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      
+      if (isLoggedIn !== 'true') {
+        alert('⚠️ Silakan login terlebih dahulu untuk melakukan transaksi!');
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Fungsi format rupiah
+    function formatRupiah(angka) {
+      return 'Rp ' + angka.toLocaleString('id-ID');
+    }
+
+    // Fungsi tampilkan alert
+    function tampilkanAlert(pesan, tipe) {
+      const alertDiv = document.getElementById('pesanAlert');
+      const className = tipe === 'success' ? 'alert-success' : 'alert-error';
+      
+      alertDiv.innerHTML = `<div class="alert ${className}">${pesan}</div>`;
+      
+      setTimeout(() => {
+        alertDiv.innerHTML = '';
+      }, 3000);
+    }
+
+    // Fungsi update tabel
+    function updateTabel() {
+      const tbody = document.getElementById('bodyTransaksi');
+      const btnCetak = document.getElementById('btnCetakStruk');
+      
+      if (daftarTransaksi.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty-state">
+              Belum ada transaksi. Silakan tambahkan pesanan!
+            </td>
+          </tr>
+        `;
+        document.getElementById('totalKeseluruhan').textContent = 'Rp 0';
+        btnCetak.style.display = 'none';
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      let totalSemua = 0;
+      
+      daftarTransaksi.forEach((transaksi, index) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${transaksi.namaMinuman}</td>
+          <td>${transaksi.jumlah} cup</td>
+          <td>${transaksi.kategori}</td>
+          <td>${transaksi.namaPemesan}</td>
+          <td>${formatRupiah(transaksi.harga)}</td>
+          <td>${formatRupiah(transaksi.total)}</td>
+        `;
+        
+        totalSemua += transaksi.total;
+      });
+      
+      document.getElementById('totalKeseluruhan').textContent = formatRupiah(totalSemua);
+      btnCetak.style.display = 'block';
+    }
+
+    // Event listener untuk form
+    document.getElementById('formTransaksi').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const namaMinuman = document.getElementById('namaMinuman').value;
+      const jumlah = document.getElementById('jumlah').value;
+      const kategori = document.getElementById('kategori').value;
+      const namaPemesan = document.getElementById('namaPemesan').value;
+      
+      if (!namaMinuman || !jumlah || !kategori || !namaPemesan) {
+        tampilkanAlert('⚠️ Semua field harus diisi!', 'error');
+        return;
+      }
+      
+      if (isNaN(jumlah) || parseInt(jumlah) <= 0) {
+        tampilkanAlert('⚠️ Jumlah harus berupa angka positif!', 'error');
+        return;
+      }
+      
+      if (parseInt(jumlah) > 50) {
+        tampilkanAlert('⚠️ Jumlah maksimal pemesanan adalah 50 cup!', 'error');
+        return;
+      }
+      
+      const harga = hargaMinuman[namaMinuman];
+      const total = harga * parseInt(jumlah);
+      
+      const transaksi = {
+        namaMinuman: namaMinuman,
+        jumlah: parseInt(jumlah),
+        kategori: kategori,
+        namaPemesan: namaPemesan,
+        harga: harga,
+        total: total
+      };
+      
+      daftarTransaksi.push(transaksi);
+      updateTabel();
+      document.getElementById('formTransaksi').reset();
+      tampilkanAlert('✅ Pesanan berhasil ditambahkan!', 'success');
+      document.getElementById('tabelTransaksi').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Validasi input jumlah
+    document.getElementById('jumlah').addEventListener('input', function() {
+      const nilai = this.value;
+      
+      if (nilai !== '' && (isNaN(nilai) || parseInt(nilai) <= 0)) {
+        this.setCustomValidity('Jumlah harus berupa angka positif');
+      } else if (parseInt(nilai) > 50) {
+        this.setCustomValidity('Jumlah maksimal adalah 50 cup');
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+
+    // Fungsi generate nomor struk
+    function generateNoStruk() {
+      const date = new Date();
+      const random = Math.floor(Math.random() * 10000);
+      return `INV${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}-${random}`;
+    }
+
+    // Fungsi cetak struk
+    document.getElementById('btnCetakStruk').addEventListener('click', function() {
+      if (daftarTransaksi.length === 0) return;
+
+      const now = new Date();
+      const tanggal = now.toLocaleDateString('id-ID', { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      const waktu = now.toLocaleTimeString('id-ID');
+      const username = localStorage.getItem('username') || 'Admin';
+
+      // Set info struk
+      document.getElementById('strukNo').textContent = generateNoStruk();
+      document.getElementById('strukTanggal').textContent = `${tanggal} ${waktu}`;
+      document.getElementById('strukKasir').textContent = username;
+
+      // Set items
+      let itemsHTML = '';
+      let subtotal = 0;
+
+      daftarTransaksi.forEach(item => {
+        subtotal += item.total;
+        itemsHTML += `
+          <div class="struk-item">
+            <div class="struk-item-name">${item.namaMinuman}</div>
+            <div class="struk-item-detail">
+              <span>${item.jumlah} x ${formatRupiah(item.harga)}</span>
+              <span>${formatRupiah(item.total)}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('strukItems').innerHTML = itemsHTML;
+
+      const pajak = subtotal * 0.1;
+      const total = subtotal + pajak;
+
+      document.getElementById('strukSubtotal').textContent = formatRupiah(subtotal);
+      document.getElementById('strukPajak').textContent = formatRupiah(pajak);
+      document.getElementById('strukTotal').textContent = formatRupiah(total);
+
+      // Tampilkan struk
+      document.getElementById('strukOverlay').classList.add('active');
+    });
+
+    // Fungsi print struk
+    function printStruk() {
+      window.print();
+    }
+
+    // Fungsi tutup struk
+    function closeStruk() {
+      document.getElementById('strukOverlay').classList.remove('active');
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('nav-menu');
+      menu.classList.toggle('hidden-nav');
+    }
+  </script>
+</body>
+</html>
