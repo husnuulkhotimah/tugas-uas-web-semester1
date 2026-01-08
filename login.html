@@ -241,6 +241,18 @@
       font-style: italic;
     }
 
+    .user-list {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+    }
+
+    .user-list p {
+      font-size: 13px;
+      margin: 3px 0;
+    }
+
     /* ===== FOOTER ===== */
     footer {
       background: linear-gradient(135deg, var(--text-dark), var(--primary));
@@ -310,9 +322,7 @@
         <img src="logotitle.png" alt="Logo Coffee House" class="logo">
         <h1>Golden Coffee House</h1>
         <div>
-          <button class="burger" onclick="toggleMenu()">
-              ☰
-          </button>
+          <button class="burger" onclick="toggleMenu()">☰</button>
         </div>
       </div>
       <nav>
@@ -328,7 +338,7 @@
 
   <!-- MAIN -->
   <main>
-    <h2 class="page-title">Login</h2>
+    <h2 class="page-title">🔐 Login</h2>
 
     <div class="login-container">
       <div class="login-icon">👤</div>
@@ -346,17 +356,22 @@
             <input type="password" id="password" placeholder="Masukkan password" required>
           </div>
 
-          <button type="submit" class="btn">Login</button>
+          <button type="submit" class="btn">🔑 Login</button>
         </form>
 
         <div id="loginAlert"></div>
 
         <!-- INFO LOGIN -->
         <div class="info-box">
-          <h4>Informasi Login</h4>
-          <p>Username: <strong>admin</strong></p>
-          <p>Password: <strong>admin123</strong></p>
-          <p class="info-note">* Gunakan kredensial di atas untuk login</p>
+          <h4>ℹ️ Akun yang Tersedia</h4>
+          <p class="info-note">* Pilih salah satu akun di bawah untuk login</p>
+          
+          <div class="user-list">
+            <p><strong>1. Admin:</strong> admin / admin123</p>
+            <p><strong>2. Husnul:</strong> husnul / husnul123</p>
+            <p><strong>3. Guest:</strong> guest / guest123</p>
+            <p><strong>4. Manager:</strong> manager / manager123</p>
+          </div>
         </div>
       </div>
     </div>
@@ -368,14 +383,25 @@
     <p>Dibuat oleh Husnul Khotimah | NIM: 251011701276</p>
   </footer>
 
+  <script src="auth.js"></script>
+  
   <script>
+    // DAFTAR USER YANG BISA LOGIN (MULTI-USER)
+    const validUsers = [
+      { username: 'admin', password: 'admin123', role: 'Administrator' },
+      { username: 'husnul', password: 'husnul123', role: 'Owner' },
+      { username: 'guest', password: 'guest123', role: 'Customer' },
+      { username: 'manager', password: 'manager123', role: 'Manager' }
+    ];
+
     // Cek apakah sudah login
     window.addEventListener('DOMContentLoaded', function() {
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       
       if (isLoggedIn === 'true') {
         const username = localStorage.getItem('username');
-        tampilkanAlert(`✅ Anda sudah login sebagai <strong>${username}</strong>. <a href="transaksi.html" style="color: var(--accent); text-decoration: underline;">Ke Halaman Transaksi</a>`, 'success');
+        const role = localStorage.getItem('userRole');
+        tampilkanAlert(`✅ Anda sudah login sebagai <strong>${username}</strong> (${role}). <a href="transaksi.html" style="color: var(--accent); text-decoration: underline;">Ke Halaman Transaksi</a>`, 'success');
       }
     });
 
@@ -387,16 +413,10 @@
       alertDiv.innerHTML = `<div class="alert ${className}">${pesan}</div>`;
     }
 
-    function toggleMenu() {
-      const menu = document.getElementById('nav-menu');
-      menu.classList.toggle('hidden-nav');
-    }
-
     // Event listener form login
     document.getElementById('formLogin').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      // Ambil nilai input
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
       
@@ -406,13 +426,16 @@
         return;
       }
       
-      // Validasi kredensial (dummy)
-      if (username === 'admin' && password === 'admin123') {
-        // Simpan status login ke localStorage
+      // Cari user yang cocok
+      const user = validUsers.find(u => u.username === username && u.password === password);
+      
+      if (user) {
+        // Login berhasil
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', username);
+        localStorage.setItem('username', user.username);
+        localStorage.setItem('userRole', user.role);
         
-        tampilkanAlert('✅ Login berhasil! Mengalihkan ke halaman transaksi...', 'success');
+        tampilkanAlert(`✅ Login berhasil! Selamat datang ${user.username} (${user.role})`, 'success');
         
         // Redirect ke halaman transaksi setelah 1.5 detik
         setTimeout(function() {
@@ -420,17 +443,18 @@
         }, 1500);
         
       } else {
+        // Login gagal
         tampilkanAlert('❌ Username atau password salah! Silakan coba lagi.', 'error');
       }
     });
 
-    // Validasi input tidak boleh hanya spasi
+    // Validasi input
     document.getElementById('username').addEventListener('input', function() {
-      this.value = this.value.replace(/^\s+/, ''); // Hapus spasi di awal
+      this.value = this.value.replace(/^\s+/, '');
     });
 
     document.getElementById('password').addEventListener('input', function() {
-      this.value = this.value.replace(/^\s+/, ''); // Hapus spasi di awal
+      this.value = this.value.replace(/^\s+/, '');
     });
   </script>
 </body>
