@@ -632,6 +632,7 @@
           <p><span>No. Struk:</span> <span id="strukNo"></span></p>
           <p><span>Tanggal:</span> <span id="strukTanggal"></span></p>
           <p><span>Kasir:</span> <span id="strukKasir"></span></p>
+          <p><span>Pemesan:</span> <span id="strukPemesan"></span></p>
         </div>
 
         <div class="struk-items" id="strukItems"></div>
@@ -683,7 +684,6 @@
       "Korean Strawberry Milk": 45000,
       "Lavender Lime Mojito": 45000
     };
-
     // Array untuk menyimpan transaksi
     let daftarTransaksi = [];
 
@@ -854,6 +854,8 @@
       document.getElementById('strukNo').textContent = generateNoStruk();
       document.getElementById('strukTanggal').textContent = `${tanggal} ${waktu}`;
       document.getElementById('strukKasir').textContent = username;
+      document.getElementById('strukPemesan').textContent = daftarTransaksi[0].namaPemesan;
+
 
       let itemsHTML = '';
       let subtotal = 0;
@@ -886,11 +888,32 @@
     // Fungsi print struk
     function printStruk() {
       window.print();
+      
+      // Setelah print, tanya apakah mau reset transaksi
+      setTimeout(() => {
+        const reset = confirm('Struk sudah dicetak! Apakah ingin mereset transaksi untuk pemesan berikutnya?');
+        if (reset) {
+          resetTransaksi();
+          closeStruk();
+        }
+      }, 500);
     }
 
     // Fungsi tutup struk
     function closeStruk() {
+      const reset = confirm('Apakah ingin mereset transaksi untuk pemesan berikutnya?');
+      if (reset) {
+        resetTransaksi();
+      }
       document.getElementById('strukOverlay').classList.remove('active');
+    }
+
+    // Fungsi BARU untuk reset transaksi
+    function resetTransaksi() {
+      daftarTransaksi = [];
+      localStorage.removeItem('daftarTransaksi');
+      updateTabel();
+      tampilkanAlert('✅ Transaksi berhasil direset! Siap untuk pemesan berikutnya.', 'success');
     }
   </script>
 </body>

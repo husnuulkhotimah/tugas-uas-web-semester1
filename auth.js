@@ -23,7 +23,6 @@ function updateNavigation() {
   if (!loginLink) return;
   
   if (isLoggedIn === 'true' && username) {
-    // User sudah login - ubah text jadi "Logout (username)" dengan warna beda tipis
     loginLink.textContent = `Logout (${username})`;
     loginLink.href = '#';
     
@@ -31,7 +30,6 @@ function updateNavigation() {
       logout(event);
     };
   } else {
-    // User belum login - tampilkan "Login" normal
     loginLink.textContent = 'Login';
     loginLink.href = 'login.html';
     loginLink.style.backgroundColor = ''; // Reset background
@@ -39,7 +37,6 @@ function updateNavigation() {
   }
 }
 
-// Fungsi logout
 function logout(event) {
   if (event) event.preventDefault();
   
@@ -53,7 +50,10 @@ function logout(event) {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('username');
     localStorage.removeItem('userRole');
-    
+
+    // 🔥 TAMBAHAN: HAPUS DATA TRANSAKSI
+    localStorage.removeItem('daftarTransaksi');
+
     // Alert dan redirect ke halaman login
     alert('Logout berhasil! Terima kasih telah menggunakan Golden Coffee House.');
     window.location.href = 'login.html';
